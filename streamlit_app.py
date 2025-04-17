@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 
 # 1. 예측 결과 불러오기
 df = pd.read_csv("predicted_4weeks.csv")
+df2 = pd.read_csv("last4_weeks.csv")  # 포함: week, item_id, store_id, sales, y_pred, gap, forecast_flag
+
 df['week'] = df['week'].astype(int)
 
 st.title("📦 다음 4주 수요 예측 대시보드")
@@ -61,18 +63,18 @@ with tab3:
     # streamlit_app.py
 
 # 1. 지난 4주 예측 비교 데이터 불러오기
-    df = pd.read_csv("last4_weeks.csv")  # 포함: week, item_id, store_id, sales, y_pred, gap, forecast_flag
+    df2 = pd.read_csv("last4_weeks.csv")  # 포함: week, item_id, store_id, sales, y_pred, gap, forecast_flag
 
     st.title("📦 지난 4주 예측 기반 재고관리 대시보드")
 
     # 2. 지점 선택
-    store = st.selectbox("지점(store_id) 선택", sorted(df['store_id'].unique()))
+    store = st.selectbox("지점(store_id) 선택", sorted(df2['store_id'].unique()))
 
     # 3. 주차 선택
-    week = st.selectbox("주차 선택", sorted(df['week'].unique(), reverse=True))
+    week = st.selectbox("주차 선택", sorted(df2['week'].unique(), reverse=True))
 
     # 4. 필터링된 데이터
-    filtered = df[(df['store_id'] == store) & (df['week'] == week)]
+    filtered = df2[(df2['store_id'] == store) & (df2['week'] == week)]
 
     # 5. 예측 오류 분포 차트
     st.subheader(f"📊 {store} 지점, {week}주차 예측 결과 분포")
@@ -94,7 +96,7 @@ with tab3:
     # 8. 품목 선택 시 예측 vs 실제 시각화
     if not filtered.empty:
         selected_item = st.selectbox("📈 품목 예측 추이 보기", filtered['item_id'].unique())
-        item_df = df[(df['store_id'] == store) & (df['item_id'] == selected_item)]
+        item_df = df2[(df2['store_id'] == store) & (df2['item_id'] == selected_item)]
 
         st.subheader(f"📉 {selected_item} - 예측 vs 실제 판매량")
         fig, ax = plt.subplots()
