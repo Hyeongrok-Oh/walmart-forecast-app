@@ -8,6 +8,8 @@ df = pd.read_csv("predicted_4weeks.csv")
 
 st.title("📦 다음 4주 수요 예측 대시보드")
 
+df['week'] = (df['week']).astype(int)
+
 # 2. 카테고리 필터 UI
 cat = st.selectbox("카테고리 선택", df['cat_id'].unique())
 dept = st.selectbox("부서 선택", df[df['cat_id'] == cat]['dept_id'].unique())
@@ -22,9 +24,9 @@ filtered = df[(df['cat_id'] == cat) &
 
 # 4. 예측 시계열 그래프
 fig, ax = plt.subplots()
-ax.plot(filtered['week'], filtered['predicted_sales'], marker='o', color='seagreen')
-ax.set_title(f"{item} - 4주 예측")
-ax.set_xlabel("주차")
-ax.set_ylabel("예측 수요량")
+ax.plot([1,2,3,4], filtered['predicted_sales'], marker='o', color='seagreen')
+ax.set_title(f"{item} expected sales")
+ax.set_xlabel("Weeks After This Week")
+ax.set_ylabel("Sales")
 ax.grid(True)
 st.pyplot(fig)
