@@ -59,45 +59,54 @@ with tab2:
     ax.grid(True)
     st.pyplot(fig)
 
+# 📦 Tab 3: 지난 4주간 예측 vs 실제 판매량 비교
 with tab3:
-    # 2. 지점 선택
-    store = st.selectbox("지점(store_id) 선택", sorted(df2['store_id'].unique()))
+    # ✅ 변수명 구분 (store → store_tab3 등)
+    store_tab3 = st.selectbox("지점 선택", sorted(df2['store_id'].unique()), key="store_tab3")
+    week_tab3 = st.selectbox("주차 선택", sorted(df2['week'].unique(), reverse=True), key="week_tab3")
 
-    # 3. 주차 선택
-    week = st.selectbox("주차 선택", sorted(df2['week'].unique(), reverse=True))
+    # ✅ 필터링된 데이터프레임 (지난 4주 중 선택된 지점 + 주차)
+    filtered_tab3 = df2[(df2['store_id'] == store_tab3) & (df2['week'] == week_tab3)]
 
-    # 4. 필터링된 데이터
-    filtered = df2[(df2['store_id'] == store) & (df2['week'] == week)]
+    # ✅ 예측 상태별 분포 시각화
+    st.subheader(f"📊 {store_tab3} 지점 - {week_tab3}주차 예측 분류 현황")
+    st.bar_chart(filtered_tab3['forecast_flag'].value_counts())
 
-    # 5. 예측 오류 분포 차트
-    st.subheader(f"📊 {store} 지점, {week}주차 예측 결과 분포")
-    st.bar_chart(filtered['forecast_flag'].value_counts())
-
-    # 6. 위험 품목 테이블
-    st.subheader("🚨 과잉 또는 부족 품목")
-    danger_df = filtered[filtered['forecast_flag'] != '✅ 정상범위']
+    # ✅ 과잉재고/부족위험 품목 목록
+    st.subheader("🚨 과잉 또는 부족 품목 리스트")
+    danger_df = filtered_tab3[filtered_tab3['forecast_flag'] != '✅ 정상범위']
     st.dataframe(danger_df[['item_id', 'sales', 'y_pred', 'gap', 'forecast_flag']])
 
-    # 7. 다운로드 버튼
+    # ✅ CSV 다운로드 버튼
     st.download_button(
         label="📥 이 주차 예측 비교 결과 다운로드",
-        data=filtered.to_csv(index=False).encode('utf-8-sig'),
-        file_name=f"{store}_{week}_예측_비교결과.csv",
+        data=filtered_tab3.to_csv(index=False).encode('utf-8-sig'),
+        file_name=f"{store_tab3}_{week_tab3}_예측비교.csv",
         mime='text/csv'
     )
 
-    # 8. 품목 선택 시 예측 vs 실제 시각화
-    if not filtered.empty:
-        selected_item = st.selectbox("📈 품목 예측 추이 보기", filtered['item_id'].unique())
-        item_df = df2[(df2['store_id'] == store) & (df2['item_id'] == selected_item)]
+    # ✅ 품목 선택 → 예측 vs 실제 비교 시계열 시각화
+    if not filtered_tab3.empty:
+        selected_item_tab3 = st.selectbox(
+            "📈 품목 예측 추이 보기", 
+            filtered_tab3['item_id'].unique(), 
+            key="selected_item_tab3"
+        )
 
-        st.subheader(f"📉 {selected_item} - 예측 vs 실제 판매량")
+        item_history_df = df2[
+            (df2['store_id'] == store_tab3) & 
+            (df2['item_id'] == selected_item_tab3)
+        ].sort_values(by="week")
+
+        st.subheader(f"📉 {selected_item_tab3} - 예측 vs 실제 판매량 추이")
+
         fig, ax = plt.subplots()
-        ax.plot(item_df['week'], item_df['sales'], label='Actual', marker='o')
-        ax.plot(item_df['week'], item_df['y_pred'], label='Predicted', marker='x')
-        ax.set_title(f"{selected_item} 판매량 비교")
+        ax.plot(item_history_df['week'], item_history_df['sales'], label='실제 판매량', marker='o')
+        ax.plot(item_history_df['week'], item_history_df['y_pred'], label='예측 판매량', marker='x')
+        ax.set_title(f"{selected_item_tab3} - 판매량 비교")
         ax.set_xlabel("주차")
         ax.set_ylabel("판매량")
         ax.legend()
         ax.grid(True)
         st.pyplot(fig)
+
