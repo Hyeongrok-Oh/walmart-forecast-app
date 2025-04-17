@@ -12,7 +12,7 @@ df['week'] = (df['week']).astype(int)
 
 # 2. 카테고리 필터 UI
 store = st.selectbox("지점 선택", df['store_id'].unique())
-cat = st.selectbox("카테고리 선택", df[[df['store_id'] == store]]['cat_id'].unique())
+cat = st.selectbox("카테고리 선택", df[df['store_id'] == store]['cat_id'].unique())
 dept = st.selectbox("부서 선택", df[df['cat_id'] == cat]['dept_id'].unique())
 item = st.selectbox("상품 선택", df[(df['dept_id'] == dept) & (df['store_id'] == store)]['item_id'].unique())
 
