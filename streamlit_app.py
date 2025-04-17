@@ -1,3 +1,8 @@
+# streamlit_app.py
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+
 # 1. 예측 결과 불러오기
 df = pd.read_csv("predicted_4weeks.csv")
 df['week'] = df['week'].astype(int)
