@@ -46,13 +46,3 @@ with tab2:
 
     top_item = store_df.groupby('item_id')['predicted_sales'].sum().idxmax()
     item_df = store_df[store_df['item_id'] == top_item]
-
-    st.subheader(f"🔥 {store} - {top_item}의 예측 추이")
-
-    fig, ax = plt.subplots()
-    ax.plot(item_df['week'], item_df['predicted_sales'], marker='o', color='darkgreen')
-    ax.set_title(f"{top_item} 예측 수요량 (주별)")
-    ax.set_xlabel("주차")
-    ax.set_ylabel("예측 수요량")
-    ax.grid(True)
-    st.pyplot(fig)
