@@ -4,7 +4,7 @@ matplotlib
 numpy
 scikit-learn
 seaborn
-LabelEncoder
+labelencoder
 lightgbm
 early_stopping
 matplotlib.pyplot
