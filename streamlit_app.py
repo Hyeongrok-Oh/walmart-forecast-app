@@ -61,7 +61,7 @@ with tab3:
     # streamlit_app.py
 
 # 1. 지난 4주 예측 비교 데이터 불러오기
-    df = pd.read_csv("last4_df.csv")  # 포함: week, item_id, store_id, sales, y_pred, gap, forecast_flag
+    df = pd.read_csv("last4_weeks.csv")  # 포함: week, item_id, store_id, sales, y_pred, gap, forecast_flag
 
     st.title("📦 지난 4주 예측 기반 재고관리 대시보드")
 
