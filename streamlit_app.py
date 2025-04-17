@@ -9,7 +9,7 @@ df2 = pd.read_csv("last_4weeks.csv")  # 포함: week, item_id, store_id, sales, 
 
 df['week'] = df['week'].astype(int)
 
-st.title("📦 다음 4주 수요 예측 대시보드")
+st.title("수요 예측 대시보드")
 
 # 탭으로 기능 분리
 tab1, tab2, tab3 = st.tabs(["상품별 예측", "지점별 다운로드", "과거 판매량 분석"])
@@ -40,7 +40,7 @@ with tab2:
     store_df = df[df['store_id'] == store]
 
     st.download_button(
-        label=f"📥 {store} 지점 전체 예측 결과 다운로드",
+        label=f"{store} 지점 전체 예측 결과 다운로드",
         data=store_df.to_csv(index=False).encode('utf-8-sig'),
         file_name=f"{store}_predicted_4weeks.csv",
         mime='text/csv'
@@ -56,17 +56,17 @@ with tab3:
     filtered_tab3 = df2[(df2['store_id'] == store_tab3) & (df2['week'] == week_tab3)]
 
     # ✅ 예측 상태별 분포 시각화
-    st.subheader(f"📊 {store_tab3} 지점 - {week_tab3}주차 예측 분류 현황")
+    st.subheader(f"{store_tab3} 지점 - {week_tab3}주차 예측 분류 현황")
     st.bar_chart(filtered_tab3['forecast_flag'].value_counts())
 
     # ✅ 과잉재고/부족위험 품목 목록
-    st.subheader("🚨 과잉 또는 부족 품목 리스트")
+    st.subheader("과잉 또는 부족 품목 리스트")
     danger_df = filtered_tab3[filtered_tab3['forecast_flag'] != '✅ 정상범위']
     st.dataframe(danger_df[['item_id', 'sales', 'y_pred', 'gap', 'forecast_flag']])
 
     # ✅ CSV 다운로드 버튼
     st.download_button(
-        label="📥 이 주차 예측 비교 결과 다운로드",
+        label="이 주차 예측 비교 결과 다운로드",
         data=filtered_tab3.to_csv(index=False).encode('utf-8-sig'),
         file_name=f"{store_tab3}_{week_tab3}_예측비교.csv",
         mime='text/csv'
@@ -85,7 +85,7 @@ with tab3:
             (df2['item_id'] == selected_item_tab3)
         ].sort_values(by="week")
 
-        st.subheader(f"📉 {selected_item_tab3} - 예측 vs 실제 판매량 추이")
+        st.subheader(f"{selected_item_tab3} - 예측 vs 실제 판매량 추이")
 
         fig, ax = plt.subplots()
         ax.plot(item_history_df['week'], item_history_df['sales'], label='Actual Sales', marker='o')
