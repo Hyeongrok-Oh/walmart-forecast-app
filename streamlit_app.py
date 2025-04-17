@@ -46,19 +46,6 @@ with tab2:
         mime='text/csv'
     )
 
-    top_item = store_df.groupby('item_id')['predicted_sales'].sum().idxmax()
-    item_df = store_df[store_df['item_id'] == top_item]
-
-    st.subheader(f"🔥 {store} - {top_item}의 예측 추이")
-
-    fig, ax = plt.subplots()
-    ax.plot(item_df['week'], item_df['predicted_sales'], marker='o', color='darkgreen')
-    ax.set_title(f"{top_item} 예측 수요량 (주별)")
-    ax.set_xlabel("주차")
-    ax.set_ylabel("예측 수요량")
-    ax.grid(True)
-    st.pyplot(fig)
-
 # 📦 Tab 3: 지난 4주간 예측 vs 실제 판매량 비교
 with tab3:
     # ✅ 변수명 구분 (store → store_tab3 등)
@@ -101,11 +88,11 @@ with tab3:
         st.subheader(f"📉 {selected_item_tab3} - 예측 vs 실제 판매량 추이")
 
         fig, ax = plt.subplots()
-        ax.plot(item_history_df['week'], item_history_df['sales'], label='실제 판매량', marker='o')
-        ax.plot(item_history_df['week'], item_history_df['y_pred'], label='예측 판매량', marker='x')
-        ax.set_title(f"{selected_item_tab3} - 판매량 비교")
-        ax.set_xlabel("주차")
-        ax.set_ylabel("판매량")
+        ax.plot(item_history_df['week'], item_history_df['sales'], label='Actual Sales', marker='o')
+        ax.plot(item_history_df['week'], item_history_df['y_pred'], label='Predicted Sales', marker='x')
+        ax.set_title(f"{selected_item_tab3} - Sales Comparison")
+        ax.set_xlabel("Week")
+        ax.set_ylabel("Sales")
         ax.legend()
         ax.grid(True)
         st.pyplot(fig)
