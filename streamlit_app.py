@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 # 1. 예측 결과 불러오기
 df = pd.read_csv("predicted_4weeks.csv")
-df2 = pd.read_csv("last4_weeks.csv")  # 포함: week, item_id, store_id, sales, y_pred, gap, forecast_flag
+df2 = pd.read_csv("last_4weeks.csv")  # 포함: week, item_id, store_id, sales, y_pred, gap, forecast_flag
 
 df['week'] = df['week'].astype(int)
 
