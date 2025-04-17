@@ -24,7 +24,7 @@ filtered = df[(df['cat_id'] == cat) &
 
 # 4. 예측 시계열 그래프
 fig, ax = plt.subplots()
-ax.plot([1,2,3,4], filtered['predicted_sales'], marker='o', color='seagreen')
+ax.plot(["1","2","3","4"], filtered['predicted_sales'], marker='o', color='seagreen')
 ax.set_title(f"{item} expected sales")
 ax.set_xlabel("Weeks After This Week")
 ax.set_ylabel("Sales")
