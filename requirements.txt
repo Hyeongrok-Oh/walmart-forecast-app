@@ -1,0 +1,10 @@
+streamlit
+pandas
+matplotlib
+numpy
+scikit-learn
+seaborn
+LabelEncoder
+lightgbm
+early_stopping
+matplotlib.pyplot
